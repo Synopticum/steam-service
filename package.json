@@ -1,0 +1,17 @@
+{
+  "name": "steam-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "microservice": "fastify",
+    "start": "node app.js"
+  },
+  "author": "Sergey Novikov",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "fastify": "^2.0.0",
+    "fastify-static": "^2.3.4"
+  }
+}
