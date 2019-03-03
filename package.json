@@ -12,6 +12,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "fastify": "^2.0.0",
-    "fastify-static": "^2.3.4"
+    "fastify-static": "^2.3.4",
+    "node-fetch": "^2.3.0"
   }
 }

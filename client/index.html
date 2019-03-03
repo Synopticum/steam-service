@@ -1,1 +1,29 @@
-test
+<!doctype html>
+<html>
+<head>
+    <title>Steam Service - Play multiplayer games with friends</title>
+    <link rel="shortcut icon" type="image/png" href="/favicon.png"/>
+    <!-- Polyfills only needed for Firefox and Edge. -->
+    <script src="https://unpkg.com/@webcomponents/webcomponentsjs@latest/webcomponents-loader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=PT+Sans:400,400i');
+        @import url('https://fonts.googleapis.com/css?family=VT323');
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<!-- Works only on browsers that support Javascript modules like Chrome, Safari, Firefox 60, Edge 17 -->
+<script type="module" src="src/app.js"></script>
+<script type="module" src="src/user.js"></script>
+
+<steam-app></steam-app>
+
+</body>
+</html>
