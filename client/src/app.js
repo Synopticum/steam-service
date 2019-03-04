@@ -1,75 +1,68 @@
 import {LitElement, html, css} from 'https://unpkg.com/lit-element/lit-element.js?module';
 
-// max. amount of user's view which can be opened
-const MAX_VIEWS = 2;
-
 class SteamApp extends LitElement {
 
     static get properties() {
         return {
             multiPlayerGames: { type: Array },
-            viewsActive: { type: Number },
-            intersectionsFound: { type: Array },
-
-            isNextButtonDisabled: { type: Boolean },
-            isNextButtonVisible: { type: Boolean },
-            isIntersectionButtonDisabled: { type: Boolean },
-            isIntersectionButtonVisible: { type: Boolean },
-
-            isIntersectionsVisible: { type: Boolean },
+            intersectionsFound: { type: Array }
         }
     }
 
     static get styles() {
         return css`
             :host {
-               display: flex;
-               align-items: center;
-               justify-content: center;
                width: 100%;
                height: 100%;
-               background-color: #161A21;
+               background-color: #fff;
+               display: flex;
             }
             
-            .nav {
-                position: absolute;
-                bottom: 20px;
-                right: 40px;
-                z-index: 200;
+            .steam-ids, .intersections {
+                box-sizing: border-box;
+                overflow-y: auto;
             }
             
-            .nav__add, .nav__intersection {
-                cursor: pointer;
-                padding: 10px;
-                border: 0;
-                outline: none;
-                background: none;
-                font-family: 'PT Sans', sans-serif;
-                font-size: 24px;
-                color: #fff;
-                padding: 10px 20px;
-                transition: opacity 3s;
-                background: rgba(255,255,255,.1);
-                border-radius: 10px;
-                margin-left: 10px;
+            .steam-ids {
+               display: flex;
+               flex: 1;
+               direction: rtl;
             }
             
-            .nav__add:disabled, .nav__intersection:disabled {
-                cursor: not-allowed;
-                opacity: .2;
+            .steam-ids__wrapper {
+                direction: ltr;
+                box-sizing: border-box;
+                display: flex;
+                flex: 1;
+                flex-direction: column;
+                align-items: flex-end;
+                justify-content: center;
+                padding-right: 10px;
             }
             
-            .nav__add.hidden, .nav__intersection.hidden {
-                display: none;
+            .intersections {
+                display: flex;
+                flex: 1;
+                flex-direction: column;
+                padding-left: 10px;
+                font-family: 'VT323', monospace;
+                font-size: 21px;
+                text-transform: uppercase;
+                line-height: 1.5;
+                color: #999;
             }
             
-            dialog {
-                position: fixed;
-                left: 0;
-                top: 0;
-                right: 0;
-                bottom: 0;
-                z-index: 300;
+            .intersections--default-centering {
+                justify-content: center;
+            }
+            
+            .intersections--overflow-centering {
+                justify-content: normal;
+            }
+            
+            .intersections--overflow-centering .intersections__item {
+                width: 100%;              
+                margin: auto;
             }
         `;
     }
@@ -79,74 +72,80 @@ class SteamApp extends LitElement {
 
         // defaults
         this.multiPlayerGames = [];
-        this.viewsActive = 1;
         this.intersectionsFound = [];
 
-        this.isNextButtonDisabled = true;
-        this.isNextButtonVisible = false;
-        this.isIntersectionButtonDisabled = true;
-        this.isIntersectionButtonVisible = false;
-
-        this.isIntersectionsVisible = false;
-
-        this.addEventListener('games-fetched', e => {
-            this.onGamesFetched(e)
-        });
+        this.addEventListener('games-fetch-success', e => { this.onGamesFetched(e) });
+        this.addEventListener('remove-steam-id', e => { this.removeSteamId(e) });
     }
 
     render() {
         return html`
-            <steam-user></steam-user>
-            
-            <div class="nav">
-                <button 
-                    class="nav__intersection ${!this.isIntersectionButtonVisible ? 'hidden' : ''}" 
-                    @click="${this.findCommonGames}" 
-                    .disabled="${this.isIntersectionButtonDisabled}">Show intersections</button>
-                    
-                <button 
-                    class="nav__add ${!this.isNextButtonVisible ? 'hidden' : ''}" 
-                    @click="${this.nextFriend}" 
-                    .disabled="${this.isNextButtonDisabled}">Add friend</button>
+            <div class="steam-ids">
+                <div class="steam-ids__wrapper">
+                    <steam-user></steam-user>
+                </div>
             </div>
             
-            <dialog .open="${this.isIntersectionsVisible}">${this.intersectionsFound.map(game => html`<div class="intersection">${game}</div>`)}</dialog>
+            <div class="intersections intersections--default-centering">
+                ${this.intersectionsFound.map(game => html`<div class="intersections__item">${game}</div>`)}
+            </div>
         `;
     }
 
     onGamesFetched(e) {
-        let allGames = e.detail.games;
-        let multiPlayerGames = allGames.filter(game => game.tags['Multiplayer']).map(game => game.name);
+        let existingSteamIds = this.multiPlayerGames.map(item => item.steamId);
 
-        this.multiPlayerGames = [...this.multiPlayerGames, multiPlayerGames];
+        if (!_.contains(existingSteamIds, e.detail.steamId)) {
+            this.multiPlayerGames = [...this.multiPlayerGames, {
+                elementId: e.detail.elementId,
+                steamId: e.detail.steamId,
+                games: e.detail.games
+            }];
+            this.addSteamId();
 
-        if (this.viewsActive <= MAX_VIEWS) {
-            this.isNextButtonDisabled = false;
-            this.isNextButtonVisible = true;
-        }
-
-        if (this.multiPlayerGames.length >= MAX_VIEWS) {
-            this.isIntersectionButtonDisabled = false;
-            this.isIntersectionButtonVisible = true;
+            if (this.multiPlayerGames.length > 1) {
+                this.findCommonGames();
+            }
         }
     }
 
     findCommonGames() {
-        this.intersectionsFound = _.intersection(...this.multiPlayerGames);
-        this.isIntersectionsVisible = true;
+        if (this.multiPlayerGames.length > 1) {
+            let games = this.multiPlayerGames.map(item => item.games);
+            this.intersectionsFound = _.intersection(...games);
+        } else {
+            this.intersectionsFound = [];
+        }
+
+        // correct CSS vertical centering when needed
+        _.defer(this._fixResultCentering.bind(this));
     }
 
-    nextFriend() {
-        this.viewsActive++;
-
+    addSteamId() {
         let node = document.createElement('steam-user');
-        this.shadowRoot.appendChild(node);
+        this.shadowRoot.querySelector('.steam-ids__wrapper').appendChild(node);
+    }
 
-        if (this.viewsActive >= MAX_VIEWS) {
-            this.isNextButtonVisible = false;
+    removeSteamId(e) {
+        let elementId = e.detail.elementId;
+        this.multiPlayerGames = this.multiPlayerGames.filter(item => item.elementId !== elementId);
+        this.findCommonGames();
+    }
+
+    _fixResultCentering() {
+        let result = this.shadowRoot.querySelector('.intersections');
+
+        if (this._isOverflown(result)) {
+            result.classList.remove('intersections--default-centering');
+            result.classList.add('intersections--overflow-centering');
         } else {
-            this.isNextButtonDisabled = false;
+            result.classList.remove('intersections--overflow-centering');
+            result.classList.add('intersections--default-centering');
         }
+    }
+
+    _isOverflown(element) {
+        return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
     }
 }
 

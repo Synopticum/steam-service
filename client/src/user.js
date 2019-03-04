@@ -5,24 +5,19 @@ class SteamUser extends LitElement {
     static get properties() {
         return {
             games: { type: Array },
-            currentUser: { type: String }
+            currentSteamId: { type: String },
+            isError: { type: Boolean }
         }
     }
 
     static get styles() {
         return css`
             :host {
-                position: relative;
-                padding: 0 20px;
                 font-family: 'PT Sans', sans-serif;
                 color: #fff;
-                width: 100%;
-                height: 100%;
-                display: flex;
-                flex: 1;
-                align-items: center;
-                justify-content: center;
-                flex-direction: column;
+                display: block;
+                margin: 10px 30px 10px 20px;
+                width: 400px;
             }
             
             .input {
@@ -30,84 +25,54 @@ class SteamUser extends LitElement {
                 z-index: 100;
                 max-width: 500px;
             }
-            
-            .input__label {
-                font-size: 18px;
-                font-style: italic;
-                background-color: #161A21;
-            }
         
             .input__steam-id {
                 box-sizing: border-box;
                 font-family: 'PT Sans', sans-serif;
-                background: url('/src/enter.svg') no-repeat calc(100% - 15px) 50% #306282;
-                background-size: 25px 25px;
-                border: 1px solid #22445B;
                 font-size: 22px;
-                padding: 10px 45px 10px 15px;
-                margin: 5px 0;
+                padding: 10px 45px 10px 0;
                 width: 100%;
-                max-width: 500px;
-                border: 1px solid rgba(255,255,255,.1);
-                border-radius: 10px;
-                box-shadow: 3px 3px 3px rgba(0,0,0,.15);
-                color: #fff;
+                border: 0;
+                border-bottom: 1px solid #ccc;
+                color: #555;
                 outline: none;
-                transition: border, .3s;
             }
             
-            #steam-id:hover {
-            }
-            
-            .games {
-                font-family: 'VT323', monospace;
-                text-transform: uppercase;
-                user-select: none;
-                opacity: .5;
+            .icons {
                 position: absolute;
-                z-index: 50;
-                left: 0;
-                top: 0;
-                right: 0;
-                bottom: 0;
+                right: calc(100% + 10px);
+                top: calc(50% - 20px);
                 display: flex;
                 align-items: center;
-                justify-content: center;
-                flex-direction: column;
-                overflow: hidden;
-                line-height: 1.4;
+                justify-align: flex-end;
+                height: 40px;
             }
             
-            .games::before, .games::after {
-                content: '';
-                position: absolute;
-                left: 0;
-                z-index: 75;
-                width: 100%;
-                height: 200px;
+            .error {
+                font-size: 13px;
+                width: 40px;
+                height: 40px;
+                background: url('/images/error.svg') no-repeat 50% 50%;
+                background-size: 30px;
+                transform: scale(1);
+                transition: transform .1s;
             }
             
-            .games::before {
-                top: 0;
-                background-image: linear-gradient(to top, rgba(0,0,0,0), rgba(0,0,0,1));
+            .error.hidden {
+                transform: scale(0);
             }
             
-            .games::after {
-                bottom: 0;
-                background-image: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,1));
+            .remove {
+                cursor: pointer;
+                font-size: 13px;
+                width: 30px;
+                height: 30px;
+                background: url('/images/remove.svg') no-repeat 50% 50%;
+                background-size: 20px;
             }
             
-            .games__game {
-                color: #376F95;
-                font-size: 20px;
-            }
-            
-            .games__game--multiplayer {
-                color: #66C0F4;
-            }
-            
-            .games__game--multiplayer::after {
-                content: ' ✓';
+            :host(:first-child) .remove {
+                display: none;
             }
         `;
     }
@@ -115,65 +80,68 @@ class SteamUser extends LitElement {
     constructor() {
         super();
         this.games = [];
+        this.isError = false;
+        this.elementId = Math.floor(Math.random() * (+10000 - +100)) + +100;
     }
 
     render() {
         return html`
             <div class="input">
-                <label class="input__label" for="steam-id">Paste a Steam ID to find all multi-player games</label>
-                <input type="text" class="input__steam-id" id="steam-id" @keyup="${this.findGames}">
-            </div>
-            
-            <div class="games">
-                ${this.games.map(game => html`<div class="games__game ${this._isMultiplayer(game)}">${game.name}</div>`)}
+                <input 
+                    type="text" 
+                    class="input__steam-id" 
+                    id="steam-id" 
+                    placeholder="Paste a Steam ID"
+                    @keyup="${this.findGames}" 
+                    @blur="${this.findGames}"
+                    value="">
+                    
+                <div class="icons">
+                    <div class="error ${!this.isError ? 'hidden' : ''}" title="Invalid steam account"></div>
+                    <div class="remove" @click="${this.removeSteamId}" title="Remove Steam ID"></div>
+                </div>
             </div>
         `;
     }
 
     async findGames(e) {
-        if (e.key === 'Enter') {
-            let user = e.target.value.toString();
+        let steamId = e.target.value.toString();
 
-            if (user && this.currentUser !== user) {
-                this.currentUser = user;
-                this.games = [];
+        if (steamId && this.currentSteamId !== steamId) {
+            this.currentSteamId = steamId;
+            this.games = [];
 
-                try {
-                    await fetch(`/api/users/${user}/games`).then(response => {
-                        const reader = response.body.getReader();
-                        this._consumeGamesStream(reader);
+            try {
+                await fetch(`/api/users/${steamId}/games`)
+                    .then(response => response.json())
+                    .then(games => {
+                        if (games.error) throw new Error('Error when fetching games');
+
+                        this.games = [...games];
+
+                        SteamUser._notifyApp('games-fetch-success', {
+                            elementId: this.elementId,
+                            steamId: this.currentSteamId,
+                            games: this.games
+                        });
+
+                        this.isError = false;
                     })
-                } catch (e) {
-                    console.error(e);
-                }
+            } catch (e) {
+                console.error(e);
+                this.isError = true;
             }
         }
     }
 
-    _consumeGamesStream(reader) {
-        reader.read().then(result => {
-            if (!result.done) {
-                let game = JSON.parse(new TextDecoder("utf-8").decode(result.value));
-                this.games = [...this.games, game];
-                this._consumeGamesStream(reader);
-            } else {
-                this._notifyApp();
-            }
-        })
+    removeSteamId() {
+        // debugger;
+        SteamUser._notifyApp('remove-steam-id', { elementId: this.elementId });
+        this.remove();
     }
 
-    _isMultiplayer(game) {
-        return game.tags && game.tags['Multiplayer'] ? 'games__game--multiplayer' : '';
-    }
-
-    _notifyApp() {
-        let event = new CustomEvent('games-fetched', {
-            detail: {
-                user: this.currentUser,
-                games: this.games
-            }
-        });
-
+    static _notifyApp(eventType, payload) {
+        let event = new CustomEvent(eventType, { detail: payload});
         document.querySelector('steam-app').dispatchEvent(event);
     }
 }

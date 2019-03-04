@@ -1,7 +1,7 @@
 const config = require('../../app.config');
 const fetch = require('node-fetch');
+const multiPlayerGamesDb = require('../../db/db.json');
 const STEAM_API_URL = 'http://api.steampowered.com';
-const STEAM_SPY_API_URL = 'http://steamspy.com';
 
 async function resolveNameToId(steamName) {
     return fetch(`${STEAM_API_URL}/ISteamUser/ResolveVanityURL/v0001/?key=${config.API_KEY}&vanityurl=${steamName}`)
@@ -18,16 +18,15 @@ async function getGamesById(steamId) {
         .catch(error => console.error(error));
 }
 
-async function getGameDetails(gameId) {
-    return fetch(`${STEAM_SPY_API_URL}/api.php?request=appdetails&appid=${gameId}`)
-        .then(response => response.json())
-        .then(json => {
-            return { name: json.name, tags: json.tags }
-        })
+async function getMultiPlayerGames(gamesIds) {
+    return gamesIds
+        .filter(gameId => multiPlayerGamesDb[gameId])
+        .map(gameId => multiPlayerGamesDb[gameId])
+        .map(game => game.name);
 }
 
 module.exports = {
     resolveNameToId,
     getGamesById,
-    getGameDetails
+    getMultiPlayerGames
 };
