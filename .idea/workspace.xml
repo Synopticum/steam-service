@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fb8e8739-5631-48cd-9b6e-fc5cb6c704db" name="Default Changelist" comment="" />
+    <list default="true" id="fb8e8739-5631-48cd-9b6e-fc5cb6c704db" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -14,19 +16,10 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="36" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/services/user/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="344">
-              <caret line="26" selection-start-line="26" selection-end-line="26" />
+            <state relative-caret-position="269">
+              <caret line="36" column="1" selection-start-line="36" selection-start-column="1" selection-end-line="36" selection-end-column="1" />
             </state>
           </provider>
         </entry>
@@ -34,29 +27,38 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/services/steam/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="314">
-              <caret line="24" column="30" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
+            <state relative-caret-position="210">
+              <caret line="14" column="1" lean-forward="true" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/src/app.js">
+        <entry file="file://$PROJECT_DIR$/db/db.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="219">
-              <caret line="108" column="9" selection-start-line="108" selection-start-column="9" selection-end-line="108" selection-end-column="9" />
-              <folding>
-                <element signature="n#!!block;n#styles#0;n#SteamApp#0" />
-              </folding>
+            <state relative-caret-position="320">
+              <caret line="3230" column="29" lean-forward="true" selection-start-line="3230" selection-start-column="29" selection-end-line="3230" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app.config.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="14" column="32" selection-start-line="14" selection-start-column="32" selection-end-line="14" selection-end-column="32" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/client/src/user.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="166">
-              <caret line="75" column="13" selection-start-line="75" selection-start-column="13" selection-end-line="75" selection-end-column="13" />
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="FIRST">
+              <first_editor relative-caret-position="60">
+                <caret line="4" column="66" selection-start-line="4" selection-start-column="66" selection-end-line="4" selection-end-column="66" />
+              </first_editor>
+              <second_editor />
             </state>
           </provider>
         </entry>
@@ -65,25 +67,8 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>great</find>
-      <find>io</find>
-      <find>nextFri</find>
-      <find>toggleNextButton</find>
-      <find>amount</find>
-      <find>setNextButtonDisabled</find>
-      <find>intersectio</find>
-      <find>.next</find>
-      <find>isIntersectionsVisible</find>
-      <find>multipla</find>
-      <find>isMulti</find>
-      <find>multiplayer</find>
-      <find>multiPlayerGames</find>
-      <find>name:</find>
-      <find>debugg</find>
-      <find>max_view</find>
       <find>disabled</find>
       <find>viewsActive</find>
-      <find>interse</find>
       <find>intersec</find>
       <find>nextFriend</find>
       <find>nex</find>
@@ -92,9 +77,26 @@
       <find>fetched</find>
       <find>currentUs</find>
       <find>user</find>
-      <find>intersectionsFound</find>
       <find>.id</find>
       <find>addSteamId</find>
+      <find>_.</find>
+      <find>multiPlayer</find>
+      <find>intersectionsFound</find>
+      <find>intersections</find>
+      <find>interse</find>
+      <find>steam-ids</find>
+      <find>intersecti</find>
+      <find>normaliz</find>
+      <find>games-fetch</find>
+      <find>steam-id</find>
+      <find>steamuser</find>
+      <find>steam-user</find>
+      <find>error when</find>
+      <find>paste</find>
+      <find>remove s</find>
+      <find>invalid</find>
+      <find>500px</find>
+      <find>multipla</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/client/src</dir>
@@ -108,19 +110,23 @@
       <list>
         <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/services/steamspy/index.js" />
-        <option value="$PROJECT_DIR$/client/index.html" />
         <option value="$PROJECT_DIR$/client/src/enter.svg" />
-        <option value="$PROJECT_DIR$/services/user/index.js" />
-        <option value="$PROJECT_DIR$/services/steam/index.js" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/client/images/remove.svg" />
-        <option value="$PROJECT_DIR$/client/src/app.js" />
         <option value="$PROJECT_DIR$/client/src/user.js" />
+        <option value="$PROJECT_DIR$/client/index.html" />
+        <option value="$PROJECT_DIR$/client/src/app.js" />
+        <option value="$PROJECT_DIR$/client/src/input.js" />
+        <option value="$PROJECT_DIR$/services/user/index.js" />
+        <option value="$PROJECT_DIR$/app.config.js" />
+        <option value="$PROJECT_DIR$/services/steam/index.js" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="y" value="23" />
+    <option name="x" value="18" />
+    <option name="y" value="32" />
     <option name="width" value="1440" />
     <option name="height" value="797" />
   </component>
@@ -144,18 +150,6 @@
               <item name="steam-service" type="b2602c69:ProjectViewProjectNode" />
               <item name="steam-service" type="462c0819:PsiDirectoryNode" />
               <item name="client" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="steam-service" type="b2602c69:ProjectViewProjectNode" />
-              <item name="steam-service" type="462c0819:PsiDirectoryNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-              <item name="images" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="steam-service" type="b2602c69:ProjectViewProjectNode" />
-              <item name="steam-service" type="462c0819:PsiDirectoryNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="steam-service" type="b2602c69:ProjectViewProjectNode" />
@@ -193,6 +187,7 @@
       <recent name="$PROJECT_DIR$/db" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/db" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
@@ -233,24 +228,24 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="44068000" />
+    <option name="totallyTimeSpent" value="55188000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="797" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24947146" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24947146" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32991204" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32991204" />
-      <window_info anchor="bottom" id="Debug" order="3" visible="true" weight="0.31085044" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.40469208" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info anchor="bottom" id="Terminal" order="9" weight="0.32991204" />
+      <window_info anchor="bottom" id="Terminal" order="9" weight="0.30938417" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -261,46 +256,15 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app.config.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/node-fetch/lib/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="137">
-          <caret line="240" column="43" selection-start-line="240" selection-start-column="43" selection-end-line="240" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/services/steamspy/index.js" />
     <entry file="file://$PROJECT_DIR$/client/src/enter.svg" />
-    <entry file="file://$PROJECT_DIR$/client/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="93" selection-start-line="7" selection-start-column="93" selection-end-line="7" selection-end-column="93" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="8" column="36" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/services/user/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="26" selection-start-line="26" selection-end-line="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/services/steam/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="314">
-          <caret line="24" column="30" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
         </state>
       </provider>
     </entry>
@@ -311,23 +275,69 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/images/remove.svg">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/app.js">
+    <entry file="file://$PROJECT_DIR$/client/images/remove.svg" />
+    <entry file="file://$PROJECT_DIR$/client/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="108" column="9" selection-start-line="108" selection-start-column="9" selection-end-line="108" selection-end-column="9" />
-          <folding>
-            <element signature="n#!!block;n#styles#0;n#SteamApp#0" />
-          </folding>
+        <state relative-caret-position="345">
+          <caret line="23" column="36" selection-start-line="23" selection-start-column="36" selection-end-line="23" selection-end-column="36" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/user.js">
+    <entry file="file://$PROJECT_DIR$/client/src/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="75" column="13" selection-start-line="75" selection-start-column="13" selection-end-line="75" selection-end-column="13" />
+        <state relative-caret-position="273">
+          <caret line="92" column="59" selection-start-line="92" selection-start-column="59" selection-end-line="92" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/input.js" />
+    <entry file="file://$PROJECT_DIR$/services/user/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="269">
+          <caret line="36" column="1" selection-start-line="36" selection-start-column="1" selection-end-line="36" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Downloads/api.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-11560" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/db/db.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="3230" column="29" lean-forward="true" selection-start-line="3230" selection-start-column="29" selection-end-line="3230" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/node-fetch/lib/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="240" column="43" selection-start-line="240" selection-start-column="43" selection-end-line="240" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="32" selection-start-line="14" selection-start-column="32" selection-end-line="14" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/services/steam/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="1" lean-forward="true" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="60">
+            <caret line="4" column="66" selection-start-line="4" selection-start-column="66" selection-end-line="4" selection-end-column="66" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>

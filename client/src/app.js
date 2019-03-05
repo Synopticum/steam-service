@@ -4,8 +4,8 @@ class SteamApp extends LitElement {
 
     static get properties() {
         return {
-            multiPlayerGames: { type: Array },
-            intersectionsFound: { type: Array }
+            inputs: { type: Array },
+            commonGames: { type: Array }
         }
     }
 
@@ -18,18 +18,18 @@ class SteamApp extends LitElement {
                display: flex;
             }
             
-            .steam-ids, .intersections {
+            .inputs, .common-games {
                 box-sizing: border-box;
                 overflow-y: auto;
             }
             
-            .steam-ids {
+            .inputs {
                display: flex;
                flex: 1;
                direction: rtl;
             }
             
-            .steam-ids__wrapper {
+            .inputs__wrapper {
                 direction: ltr;
                 box-sizing: border-box;
                 display: flex;
@@ -40,7 +40,7 @@ class SteamApp extends LitElement {
                 padding-right: 10px;
             }
             
-            .intersections {
+            .common-games {
                 display: flex;
                 flex: 1;
                 flex-direction: column;
@@ -52,15 +52,15 @@ class SteamApp extends LitElement {
                 color: #999;
             }
             
-            .intersections--default-centering {
+            .common-games--default-centering {
                 justify-content: center;
             }
             
-            .intersections--overflow-centering {
+            .common-games--overflow-centering {
                 justify-content: normal;
             }
             
-            .intersections--overflow-centering .intersections__item {
+            .common-games--overflow-centering .common-games__item {
                 width: 100%;              
                 margin: auto;
             }
@@ -71,80 +71,102 @@ class SteamApp extends LitElement {
         super();
 
         // defaults
-        this.multiPlayerGames = [];
-        this.intersectionsFound = [];
+        this.inputs = [];
+        this.commonGames = [];
 
-        this.addEventListener('games-fetch-success', e => { this.onGamesFetched(e) });
-        this.addEventListener('remove-steam-id', e => { this.removeSteamId(e) });
+        this.addEventListener('games-fetch', e => { this.onGamesFetched(e) });
+        this.addEventListener('remove-input', e => { this.removeInput(e.detail.elementId) });
+        this.addEventListener('reset-input', e => { this.resetInput(e.detail.elementId) });
     }
 
     render() {
         return html`
-            <div class="steam-ids">
-                <div class="steam-ids__wrapper">
-                    <steam-user></steam-user>
+            <div class="inputs">
+                <div class="inputs__wrapper">
+                    <steam-input placeholder="Enter your Steam ID"></steam-input>
                 </div>
             </div>
             
-            <div class="intersections intersections--default-centering">
-                ${this.intersectionsFound.map(game => html`<div class="intersections__item">${game}</div>`)}
+            <div class="common-games common-games--default-centering">
+                ${this.commonGames.length ? 
+                    this.commonGames.map(game => html`<div class="common-games__item">${game}</div>`) :
+                    html`No common multi-player games found<br>Please add at least two Steam IDs`}
             </div>
         `;
     }
 
     onGamesFetched(e) {
-        let existingSteamIds = this.multiPlayerGames.map(item => item.steamId);
+        let { elementId, steamId, games } = e.detail;
 
-        if (!_.contains(existingSteamIds, e.detail.steamId)) {
-            this.multiPlayerGames = [...this.multiPlayerGames, {
-                elementId: e.detail.elementId,
-                steamId: e.detail.steamId,
-                games: e.detail.games
-            }];
-            this.addSteamId();
+        if (!this._hasExistingInputUpdated(elementId)) this._addInput();
 
-            if (this.multiPlayerGames.length > 1) {
-                this.findCommonGames();
-            }
-        }
+        this._updateGames(elementId, steamId, games);
+
+        if (this._isEnoughDataToCompare) this.findCommonGames();
     }
 
     findCommonGames() {
-        if (this.multiPlayerGames.length > 1) {
-            let games = this.multiPlayerGames.map(item => item.games);
-            this.intersectionsFound = _.intersection(...games);
-        } else {
-            this.intersectionsFound = [];
-        }
+        let inputs = this.inputs.filter(input => !!input);
 
-        // correct CSS vertical centering when needed
-        _.defer(this._fixResultCentering.bind(this));
+        this._isEnoughDataToCompare(inputs) ?
+            this.commonGames = _.intersection(...inputs.map(input => input.games)) :
+            this.commonGames = [];
+
+        _.defer(this._correctGamesListCentering.bind(this));
     }
 
-    addSteamId() {
-        let node = document.createElement('steam-user');
-        this.shadowRoot.querySelector('.steam-ids__wrapper').appendChild(node);
-    }
+    removeInput(elementId) {
+        let inputs = this.inputs.slice();
+        inputs[elementId] = undefined;
 
-    removeSteamId(e) {
-        let elementId = e.detail.elementId;
-        this.multiPlayerGames = this.multiPlayerGames.filter(item => item.elementId !== elementId);
+        this.inputs = inputs;
         this.findCommonGames();
     }
 
-    _fixResultCentering() {
-        let result = this.shadowRoot.querySelector('.intersections');
+    resetInput(elementId) {
+        let inputs = this.inputs.slice();
 
-        if (this._isOverflown(result)) {
-            result.classList.remove('intersections--default-centering');
-            result.classList.add('intersections--overflow-centering');
+        if (inputs[elementId]) inputs[elementId].games = [];
+
+        this.inputs = inputs;
+        this.findCommonGames();
+    }
+
+    _addInput() {
+        let node = document.createElement('steam-input');
+        node.setAttribute('placeholder', 'Enter your friend\'s Steam ID');
+        this.shadowRoot.querySelector('.inputs__wrapper').appendChild(node);
+    }
+
+    _updateGames(elementId, steamId, games) {
+        let inputs = _.clone(this.inputs);
+        inputs[elementId] = { steamId, games };
+        this.inputs = inputs;
+    }
+
+    _hasExistingInputUpdated(elementId) {
+        return this.inputs[elementId];
+    }
+
+    _isEnoughDataToCompare(games) {
+        return games.filter(item => item !== undefined).length > 1;
+    }
+
+    _correctGamesListCentering() {
+        // fixes issue related to centering overflown flexbox container
+        // https://stackoverflow.com/questions/33454533/cant-scroll-to-top-of-flex-item-that-is-overflowing-container
+        let result = this.shadowRoot.querySelector('.common-games');
+
+        if (SteamApp._isOverflown(result)) {
+            result.classList.remove('common-games--default-centering');
+            result.classList.add('common-games--overflow-centering');
         } else {
-            result.classList.remove('intersections--overflow-centering');
-            result.classList.add('intersections--default-centering');
+            result.classList.remove('common-games--overflow-centering');
+            result.classList.add('common-games--default-centering');
         }
     }
 
-    _isOverflown(element) {
+    static _isOverflown(element) {
         return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
     }
 }

@@ -1,6 +1,6 @@
 import {LitElement, html, css} from 'https://unpkg.com/lit-element/lit-element.js?module';
 
-class SteamUser extends LitElement {
+class SteamInput extends LitElement {
 
     static get properties() {
         return {
@@ -49,6 +49,7 @@ class SteamUser extends LitElement {
             }
             
             .error {
+                position: relative;
                 font-size: 13px;
                 width: 40px;
                 height: 40px;
@@ -62,6 +63,22 @@ class SteamUser extends LitElement {
                 transform: scale(0);
             }
             
+            .error__text {
+                position: absolute;
+                bottom: 100%;
+                left: -45px;
+                width: 130px;
+                transform: scale(0);
+                transition: transform .1s;
+                white-space: nowrap;
+                text-align: center;
+                color: #666;
+            }
+            
+            .error:hover .error__text {
+                transform: scale(1);
+            }
+            
             .remove {
                 cursor: pointer;
                 font-size: 13px;
@@ -71,7 +88,7 @@ class SteamUser extends LitElement {
                 background-size: 20px;
             }
             
-            :host(:first-child) .remove {
+            .remove.hidden {
                 display: none;
             }
         `;
@@ -85,59 +102,82 @@ class SteamUser extends LitElement {
     }
 
     render() {
+        let placeholder = this.attributes.placeholder.value;
+
         return html`
             <div class="input">
                 <input 
                     type="text" 
                     class="input__steam-id" 
                     id="steam-id" 
-                    placeholder="Paste a Steam ID"
-                    @keyup="${this.findGames}" 
+                    placeholder="${placeholder}"
+                    @keyup="${_.debounce(this.findGames, 300)}" 
                     @blur="${this.findGames}"
                     value="">
                     
                 <div class="icons">
-                    <div class="error ${!this.isError ? 'hidden' : ''}" title="Invalid steam account"></div>
-                    <div class="remove" @click="${this.removeSteamId}" title="Remove Steam ID"></div>
+                    <div class="error ${!this.isError ? 'hidden' : ''}">
+                        <div class="error__text">Steam ID not found</div>
+                    </div>
+                    
+                    <div class="remove ${_.isEmpty(this.games) ? 'hidden' : ''}" @click="${this.removeSteamId}" title="Remove"></div>
                 </div>
             </div>
         `;
     }
 
-    async findGames(e) {
-        let steamId = e.target.value.toString();
-
-        if (steamId && this.currentSteamId !== steamId) {
-            this.currentSteamId = steamId;
-            this.games = [];
-
-            try {
-                await fetch(`/api/users/${steamId}/games`)
-                    .then(response => response.json())
-                    .then(games => {
-                        if (games.error) throw new Error('Error when fetching games');
-
-                        this.games = [...games];
-
-                        SteamUser._notifyApp('games-fetch-success', {
-                            elementId: this.elementId,
-                            steamId: this.currentSteamId,
-                            games: this.games
-                        });
-
-                        this.isError = false;
-                    })
-            } catch (e) {
-                console.error(e);
-                this.isError = true;
-            }
-        }
+    async findGames() {
+        let steamId = this.shadowRoot.querySelector('#steam-id').value || '';
+        if (this._hasChanged(steamId)) await this._updateGames(steamId);
     }
 
     removeSteamId() {
-        // debugger;
-        SteamUser._notifyApp('remove-steam-id', { elementId: this.elementId });
+        SteamInput._notifyApp('remove-input', { elementId: this.elementId });
         this.remove();
+    }
+
+    resetSteamId() {
+        this.games = [];
+        SteamInput._notifyApp('reset-input', { elementId: this.elementId })
+    }
+
+    _hasChanged(steamId) {
+        return steamId && this.currentSteamId !== steamId;
+    }
+
+    async _updateGames(steamId) {
+        this.currentSteamId = steamId;
+        this.games = [];
+
+        try {
+            let games = await SteamInput._getGamesFor(steamId);
+            this._setGames(games);
+        } catch (e) {
+            this._handleFetchError();
+        }
+    }
+
+    _handleFetchError() {
+        this.isError = true;
+        this.resetSteamId();
+    }
+
+    static async _getGamesFor(steamId) {
+        return fetch(`/api/users/${steamId}/games`).then(response => response.json());
+    }
+
+    _setGames(games) {
+        if (games.error) throw new Error('Error when fetching games');
+
+        this.games = [...games];
+
+        SteamInput._notifyApp('games-fetch', {
+            elementId: this.elementId,
+            steamId: this.currentSteamId,
+            games: this.games
+        });
+
+        this.isError = false;
     }
 
     static _notifyApp(eventType, payload) {
@@ -146,4 +186,4 @@ class SteamUser extends LitElement {
     }
 }
 
-customElements.define('steam-user', SteamUser);
+customElements.define('steam-input', SteamInput);

@@ -10,6 +10,10 @@ const config = {
     get API_KEY() {
         return getValueFor('apiKey');
     },
+
+    get MODE() {
+        return getValueFor('mode');
+    },
 };
 
 function getValueFor(argument) {
@@ -22,7 +26,7 @@ function getValueFor(argument) {
     return '';
 }
 
-if (!config.PORT || !config.URI || !config.API_KEY) {
+if (!config.PORT || !config.URI || !config.API_KEY || !config.MODE) {
     const checkMark = '\x1b[32m✔';
     const xMark = '\x1b[31m✘';
 
@@ -31,7 +35,8 @@ if (!config.PORT || !config.URI || !config.API_KEY) {
         
         \x1b[37m Port:---------------${config.PORT ? `${config.PORT} ${checkMark}` : xMark}
         \x1b[37m Server URI:---------${config.URI ? `${config.URI} ${checkMark}` : xMark}
-        \x1b[37m VK API Version:-----${config.API_KEY ? `${config.API_KEY} ${checkMark}` : xMark}
+        \x1b[37m API Key:------------${config.API_KEY ? `${config.API_KEY} ${checkMark}` : xMark}
+        \x1b[37m Mode:---------------${config.MODE ? `${config.MODE} ${checkMark}` : xMark}
         \x1b[37m`);
 }
 
